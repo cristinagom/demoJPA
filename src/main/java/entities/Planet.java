@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "planets")
@@ -55,6 +57,8 @@ public class Planet {
     @Lob
     @Column(name = "url")
     private String url;
+    @OneToMany(mappedBy = "planet")
+    private Set<Character> characters = new LinkedHashSet<>();
 
     public Planet() {}
 
@@ -165,6 +169,14 @@ public class Planet {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Set<Character> getCharacters() {
+        return characters;
+    }
+
+    public void setCharacters(Set<Character> characters) {
+        this.characters = characters;
     }
 
 }

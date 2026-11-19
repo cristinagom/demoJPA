@@ -2,6 +2,9 @@ package entities;
 
 import jakarta.persistence.*;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "characters")
 public class Character {
@@ -19,6 +22,10 @@ public class Character {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "planet_id", nullable = false)
     private Planet planet;
+
+    @ManyToMany
+    @JoinTable(name = "character_films", joinColumns = {@JoinColumn(name = "id_character")}, inverseJoinColumns = {@JoinColumn(name = "id_film")})
+    private Set<Film> films = new LinkedHashSet<>();
 
     public Character() {}
 
@@ -59,6 +66,14 @@ public class Character {
 
     public void setPlanet(Planet planet) {
         this.planet = planet;
+    }
+
+     public Set<Film> getFilms() {
+        return films;
+    }
+
+    public void setFilms(Set<Film> films) {
+        this.films = films;
     }
 
 }
