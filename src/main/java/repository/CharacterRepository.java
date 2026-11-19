@@ -17,7 +17,8 @@ public class CharacterRepository implements Repository<Character>{
         return entityManager.find(Character.class, id);
     }
     public List<Character> findAll() {
-        return entityManager.createQuery("SELECT c FROM Character c", Character.class).getResultList();
+        return entityManager.createQuery("SELECT c FROM Character c JOIN FETCH c.planet", Character.class)
+                .getResultList();
     }
 
     @Override

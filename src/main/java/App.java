@@ -1,35 +1,25 @@
+import controller.CharacterController;
 import entities.Character;
-import entities.Planet;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import repository.CharacterRepository;
-import repository.PlanetRepository;
-
-import java.util.List;
+import repository.Repository;
+import view.CharacterView;
 
 public class App {
+
     public static void main(String[] args) {
 
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        try (EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
+             EntityManager entityManager = entityManagerFactory.createEntityManager()) {
 
-        CharacterRepository characterRepository = new CharacterRepository(entityManager);
-        PlanetRepository planetRepository = new PlanetRepository(entityManager);
+            Repository<Character> characterRepository = new CharacterRepository(entityManager);
+            CharacterView view = new CharacterView(System.out);
+            CharacterController controller = new CharacterController(characterRepository, view);
 
-        Planet earth = new Planet(1000, "Earth");
-        Character jedi = new Character(1000, "Yoda", 100, earth);
+            controller.showAll();
 
-        planetRepository.save(earth);
-        characterRepository.save(jedi);
-
-        Planet foundPlanet = planetRepository.findById(earth.getId());
-        List<Planet> allPlanets = planetRepository.findAll();
-        characterRepository.delete(jedi);
-        characterRepository.update(jedi);
-
-        entityManager.close();
-        entityManagerFactory.close();
-
+        }
     }
 }
